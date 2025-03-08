@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc mừng Bà 8/3 vui vẻ!</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body {
+            text-align: center;
+            font-family:Arial, Helvetica, sans-serif;
+            background-color: #fff5f8;
+            color: #ff4081;
+            overflow: hidden;
+        }
+        h1 {
+            font-size: 3rem;
+            display: block;
+            margin-top: 20px;
+        }
+        .letter {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+            width: 80%;
+            max-width: 500px;
+            margin: auto;
+            margin-top: 20px;
+        }
+        .buttons {
+            margin-top: 20px;
+            position: relative;
+            width: 100%;
+            height: 100px;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            z-index: 10;
+        }
+        .btn-yes {
+            background-color: #ff4081;
+            color: white;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+        }
+        .btn-no {
+            background-color: #ccc;
+            color: black;
+            right: 20px;
+            bottom: 10px;
+        }
+        .miss-message {
+            position: absolute;
+            font-size: 1.2rem;
+            color: red;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 5;
+        }
+        .reward-message {
+            font-size: 1.5rem;
+            color: #ff4081;
+            opacity: 0;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chúc mừng Bà 8/3 vui vẻ! 🌸</h1>
+    <div class="letter">
+        <p>Bà yêu quý,</p>
+        <p>Chúc bà 8 tháng 3 mạnh khỏe, vui vẻ, sống lâu trăm tuổi, luôn hạnh phúc bên con cháu! ❤️</p>
+        <p>Bà có muốn nhận quà không? 😆</p>
+        <div class="buttons" id="buttonsContainer">
+            <button class="btn btn-yes" id="yesBtn">Có</button>
+            <button class="btn btn-no" id="noBtn" onclick="alert('Ơ kìa, không nhận quà thật hả bà? 😳')">Không</button>
+        </div>
+        <div class="miss-message" id="missMessage">Trượt rồi! 😆</div>
+        <div class="reward-message" id="rewardMessage">Bà nhận được 1000 năm hạnh phúc! 🎉</div>
+    </div>
+    <script>
+        let yesBtn = document.getElementById("yesBtn");
+        let noBtn = document.getElementById("noBtn");
+        let buttonsContainer = document.getElementById("buttonsContainer");
+        let missMessage = document.getElementById("missMessage");
+        let rewardMessage = document.getElementById("rewardMessage");
+        let messages = ["Trượt rồi! 😆", "Hụt! 😂", "Gần được rồi! 🤭", "Thử lại đi! 🤣", "Ơ kìa! 😜"];
+
+        let moveCount = 0; // Đếm số lần nút đã né
+
+function moveButton() {
+    if (moveCount < 5 || Math.random() > 0.5) { // 5 lần đầu luôn né, sau đó 90% né
+        let containerRect = buttonsContainer.getBoundingClientRect();
+        let btnRect = yesBtn.getBoundingClientRect();
+        let maxX = (containerRect.width - btnRect.width) / 2;
+        let maxY = containerRect.height - btnRect.height;
+        let x = (Math.random() * maxX) * (Math.random() < 0.5 ? 1 : -1);
+        let y = Math.random() * maxY;
+        
+        gsap.to(yesBtn, { x: x, y: y, duration: 0.2, ease: "power1.out" });
+
+        let randomMessage = messages[Math.floor(Math.random() * messages.length)];
+        missMessage.textContent = randomMessage;
+        missMessage.style.opacity = 1;
+        setTimeout(() => { missMessage.style.opacity = 0; }, 1000);
+
+        moveCount++; // Tăng số lần di chuyển
+    }
+}
+
+        
+        function shakeButton(button) {
+            gsap.to(button, { x: -10, duration: 0.1, yoyo: true, repeat: 5 });
+        }
+        
+        yesBtn.addEventListener("mouseenter", moveButton);
+        yesBtn.addEventListener("click", function() {
+            shakeButton(yesBtn);
+            rewardMessage.style.opacity = 1;
+            gsap.fromTo(rewardMessage, { scale: 0.5 }, { scale: 1.2, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+        });
+        noBtn.addEventListener("mouseenter", function() { shakeButton(noBtn); });
+        yesBtn.addEventListener("touchstart", function(event) {
+            event.preventDefault();
+            moveButton();
+        });
+    </script>
+</body>
+</html>
