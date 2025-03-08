@@ -98,7 +98,7 @@
         let moveCount = 0; // Đếm số lần nút đã né
 
 function moveButton() {
-    if (moveCount < 5 || Math.random() > 0.5) { // 5 lần đầu luôn né, sau đó 90% né
+    if (moveCount < 5) { // 5 lần đầu chắc chắn né
         let containerRect = buttonsContainer.getBoundingClientRect();
         let btnRect = yesBtn.getBoundingClientRect();
         let maxX = (containerRect.width - btnRect.width) / 2;
@@ -114,8 +114,18 @@ function moveButton() {
         setTimeout(() => { missMessage.style.opacity = 0; }, 1000);
 
         moveCount++; // Tăng số lần di chuyển
+    } else {
+        yesBtn.removeEventListener("mouseenter", moveButton); // Ngừng né tránh
+        yesBtn.removeEventListener("touchstart", moveButton); // Ngừng né trên điện thoại
     }
 }
+
+yesBtn.addEventListener("mouseenter", moveButton);
+yesBtn.addEventListener("touchstart", function(event) {
+    event.preventDefault(); // Ngăn bấm trúng sớm
+    moveButton();
+});
+
 
         
         function shakeButton(button) {
